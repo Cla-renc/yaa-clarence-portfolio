@@ -61,18 +61,31 @@ const AdminBlog = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const data = new FormData();
-            data.append('title', formData.title);
-            data.append('excerpt', formData.excerpt);
-            data.append('content', formData.content);
+            let uploadedMediaUrl = '';
             if (mediaFile) {
-                data.append('media', mediaFile);
-            } else if (formData.externalMediaUrl) {
-                data.append('mediaUrl', formData.externalMediaUrl);
-                data.append('mediaType', mediaType);
+                const uploadData = new FormData();
+                uploadData.append('image', mediaFile);
+                const uploadRes = await api.post('/blog/upload', uploadData, {
+                    headers: { 'Content-Type': 'multipart/form-data' }
+                });
+                uploadedMediaUrl = uploadRes.data.imageUrl;
             }
 
-            await api.post('/blog', data);
+            const postData = {
+                title: formData.title,
+                excerpt: formData.excerpt,
+                content: formData.content,
+            };
+
+            if (uploadedMediaUrl) {
+                postData.mediaUrl = uploadedMediaUrl;
+                postData.mediaType = mediaType;
+            } else if (formData.externalMediaUrl) {
+                postData.mediaUrl = formData.externalMediaUrl;
+                postData.mediaType = mediaType;
+            }
+
+            await api.post('/blog', postData);
 
             setShowForm(false);
             setFormData({ title: '', excerpt: '', content: '', externalMediaUrl: '' });

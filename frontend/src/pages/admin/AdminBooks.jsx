@@ -38,13 +38,20 @@ const AdminBooks = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const data = new FormData();
-            Object.keys(formData).forEach(key => data.append(key, formData[key]));
-            if (file) data.append('image', file);
+            let coverImage = '';
+            if (file) {
+                const uploadData = new FormData();
+                uploadData.append('image', file);
+                const uploadRes = await api.post('/books/upload', uploadData, {
+                    headers: { 'Content-Type': 'multipart/form-data' }
+                });
+                coverImage = uploadRes.data.imageUrl;
+            }
 
-            await api.post('/books', data, {
-                headers: { 'Content-Type': 'multipart/form-data' }
-            });
+            const bookData = { ...formData };
+            if (coverImage) bookData.coverImage = coverImage;
+
+            await api.post('/books', bookData);
             setShowForm(false);
             setFormData({ title: '', synopsis: '', genre: 'Personal Development', audience: 'Young Men', status: 'Writing', price: 0, isForSale: false, isFree: false });
             setFile(null);

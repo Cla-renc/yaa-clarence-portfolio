@@ -36,13 +36,20 @@ const AdminProjects = () => {
         e.preventDefault();
         setError('');
         try {
-            const data = new FormData();
-            Object.keys(formData).forEach(key => data.append(key, formData[key]));
-            if (file) data.append('image', file);
+            let imageUrl = '';
+            if (file) {
+                const uploadData = new FormData();
+                uploadData.append('image', file);
+                const uploadRes = await api.post('/projects/upload', uploadData, {
+                    headers: { 'Content-Type': 'multipart/form-data' }
+                });
+                imageUrl = uploadRes.data.imageUrl;
+            }
 
-            await api.post('/projects', data, {
-                headers: { 'Content-Type': 'multipart/form-data' }
-            });
+            const projectData = { ...formData };
+            if (imageUrl) projectData.thumbnail = imageUrl;
+
+            await api.post('/projects', projectData);
 
             setShowForm(false);
             setFormData({ title: '', description: '', category: 'Web Development', liveUrl: '', repoUrl: '' });
