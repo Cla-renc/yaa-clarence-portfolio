@@ -38,10 +38,10 @@ exports.contactFormLimiter = rateLimit({
     }
 });
 
-// Rate limiter for API endpoints: max 30 requests per minute
+// Rate limiter for API endpoints: max 1000 requests per 15 minutes to allow admin testing
 exports.apiLimiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 100, // 100 requests per windowMs
+    max: 1000, // 1000 requests per windowMs
     message: 'Too many requests from this IP, please try again later.',
     standardHeaders: true,
     legacyHeaders: false
