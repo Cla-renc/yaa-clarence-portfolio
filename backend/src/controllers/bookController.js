@@ -11,11 +11,7 @@ const getBooks = async (req, res) => {
 
 const createBook = async (req, res) => {
     try {
-        const bookData = { ...req.body };
-        if (req.file && req.file.path) {
-            bookData.coverImage = req.file.path;
-        }
-        const book = new Book(bookData);
+        const book = new Book(req.body);
         const createdBook = await book.save();
         res.status(201).json(createdBook);
     } catch (error) {
