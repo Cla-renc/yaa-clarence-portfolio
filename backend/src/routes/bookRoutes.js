@@ -13,7 +13,12 @@ try {
 
 router.route('/')
     .get(getBooks)
-    .post(protect, admin, upload.single('image'), createBook);
+    .post(protect, admin, createBook);
+
+router.route('/upload')
+    .post(protect, admin, upload.single('image'), (req, res) => {
+        res.send({ imageUrl: req.file?.path || '' });
+    });
 
 router.route('/:id')
     .delete(protect, admin, deleteBook);

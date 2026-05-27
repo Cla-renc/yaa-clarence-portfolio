@@ -23,13 +23,7 @@ const createBlogPost = async (req, res) => {
             author: req.user._id
         });
 
-        if (req.file?.path) {
-            const mimeType = req.file.mimetype || '';
-            const type = mimeType.startsWith('video/') ? 'video' : 'image';
-            post.mediaUrl = req.file.path;
-            post.mediaType = type;
-            if (type === 'image') post.featuredImage = req.file.path;
-        } else if (mediaUrl) {
+        if (mediaUrl) {
             post.mediaUrl = mediaUrl;
             const normalizedType = mediaType === 'video' || /\.(mp4|webm|mov|avi|mkv)(\?|$)/i.test(mediaUrl) || /tiktok\.com|youtube\.com|youtu\.be|vimeo\.com/i.test(mediaUrl) ? 'video' : 'image';
             post.mediaType = normalizedType;

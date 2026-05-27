@@ -10,7 +10,7 @@ router.route('/')
 
 router.route('/upload')
     .post(protect, admin, upload.single('image'), (req, res) => {
-        res.send({ imageUrl: req.file.path });
+        res.send({ imageUrl: req.file?.path || '' });
     });
 
 router.route('/:id')
