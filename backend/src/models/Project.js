@@ -16,11 +16,10 @@ const projectSchema = new mongoose.Schema({
 
 projectSchema.index({ category: 1, createdAt: -1 });
 
-projectSchema.pre('validate', function(next) {
+projectSchema.pre('validate', function() {
     if (this.title && !this.slug) {
         this.slug = this.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
     }
-    next();
 });
 
 module.exports = mongoose.model("Project", projectSchema);
