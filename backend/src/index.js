@@ -48,18 +48,18 @@ app.use(helmet({
     referrerPolicy: { policy: "strict-origin-when-cross-origin" }
 }));
 
-app.use(cors({
+const corsOptions = {
     origin: function (origin, callback) {
         // Allow requests with no origin (like mobile apps or curl requests)
         if (!origin) return callback(null, true);
-        
+
         const clientUrl = process.env.CLIENT_URL ? process.env.CLIENT_URL.replace(/\/$/, '') : '';
-        
+
         if (
             origin === clientUrl ||
             origin === 'http://localhost:5173' ||
             origin === 'http://127.0.0.1:5173' ||
-            origin.includes('vercel.app') // Allow all Vercel previews/deployments for ease
+            origin.includes('vercel.app')
         ) {
             callback(null, true);
         } else {
@@ -69,7 +69,11 @@ app.use(cors({
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization']
-}));
+};
+
+app.use(cors(corsOptions));
+// Handle ALL preflight OPTIONS requests globally — must come before routes
+app.options('*', cors(corsOptions));
 
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ limit: '10mb', extended: true }));
