@@ -50,7 +50,17 @@ app.use(helmet({
 
 app.use(cors({
     origin: function (origin, callback) {
-        if (!origin || allowedClientOrigins.includes(origin)) {
+        // Allow requests with no origin (like mobile apps or curl requests)
+        if (!origin) return callback(null, true);
+        
+        const clientUrl = process.env.CLIENT_URL ? process.env.CLIENT_URL.replace(/\/$/, '') : '';
+        
+        if (
+            origin === clientUrl ||
+            origin === 'http://localhost:5173' ||
+            origin === 'http://127.0.0.1:5173' ||
+            origin.includes('vercel.app') // Allow all Vercel previews/deployments for ease
+        ) {
             callback(null, true);
         } else {
             callback(new Error(`CORS policy does not allow access from origin ${origin}`));

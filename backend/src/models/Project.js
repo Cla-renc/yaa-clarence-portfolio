@@ -7,7 +7,7 @@ const projectSchema = new mongoose.Schema({
     techStack: [{ type: String }],
     category: { type: String, enum: ["Web Development", "Mobile Development", "Design", "Writing", "web", "mobile", "design", "writing"] },
     images: [{ type: String }],
-    thumbnail: { type: String, required: true },
+    thumbnail: { type: String, default: "" },
     liveUrl: { type: String },
     repoUrl: { type: String },
     featured: { type: Boolean, default: false },
@@ -15,5 +15,12 @@ const projectSchema = new mongoose.Schema({
 });
 
 projectSchema.index({ category: 1, createdAt: -1 });
+
+projectSchema.pre('validate', function(next) {
+    if (this.title && !this.slug) {
+        this.slug = this.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+    }
+    next();
+});
 
 module.exports = mongoose.model("Project", projectSchema);
