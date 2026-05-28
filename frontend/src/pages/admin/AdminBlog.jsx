@@ -61,9 +61,11 @@ const RichEditor = ({ value, onChange }) => {
         editorRef.current?.focus();
         let finalArg = arg;
         if (cmd === 'createLink') {
-            const url = prompt('URL:');
+            saveSelection();
+            const url = window.prompt('Enter URL');
             if (!url) return;
             finalArg = url;
+            restoreSelection();
         }
         document.execCommand(cmd, false, finalArg);
     };
@@ -93,7 +95,11 @@ const RichEditor = ({ value, onChange }) => {
     const toolbarBtn = (label, cmd, arg) => (
         <button
             type="button"
-            onMouseDown={(e) => { e.preventDefault(); exec(cmd, arg); }}
+            onMouseDown={(e) => {
+                e.preventDefault();
+                if (cmd === 'createLink') saveSelection();
+                exec(cmd, arg);
+            }}
             className="px-2 py-1 bg-secondary-bg border border-border rounded text-primary-text hover:bg-primary-accent hover:text-primary-bg transition text-sm font-bold"
             title={label}
         >
