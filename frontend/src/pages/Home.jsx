@@ -85,7 +85,7 @@ const HeroSection = ({ bgY, aboutData }) => {
 
                 {/* ── LEFT: Profile Photo (no card/bg, blends with theme) ── */}
                 <motion.div
-                    className="relative flex-shrink-0 w-[240px] sm:w-[280px] md:w-[320px] lg:w-[360px] xl:w-[380px] self-end md:pb-24"
+                    className="relative flex-shrink-0 w-60 sm:w-[280px] md:w-80 lg:w-[360px] xl:w-[380px] self-end md:pb-24"
                     initial={{ opacity: 0, x: -60 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.9, ease: 'easeOut' }}
@@ -142,7 +142,7 @@ const HeroSection = ({ bgY, aboutData }) => {
                         transition={{ duration: 0.7, delay: 0.8 }}
                     >
                         <h1 className="font-heading font-black text-primary-bg tracking-wide
-                            text-[18px] sm:text-[20px] md:text-[22px] lg:text-[24px] whitespace-nowrap"
+                            text-lg sm:text-xl md:text-[22px] lg:text-2xl whitespace-nowrap"
                         >
                             Yaa Clarence
                         </h1>
@@ -162,7 +162,7 @@ const HeroSection = ({ bgY, aboutData }) => {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.7, delay: 0.5 }}
                         className="text-primary-accent font-bold tracking-[0.2em] uppercase mb-4
-                            text-[11px] sm:text-[12px] md:text-[13px]"
+                            text-[11px] sm:text-xs md:text-[13px]"
                     >
                         IT Student &bull; Author &bull; Brand Owner
                     </motion.div>
@@ -174,7 +174,7 @@ const HeroSection = ({ bgY, aboutData }) => {
                         transition={{ duration: 0.8, delay: 0.6 }}
                         style={{ fontWeight: 800 }}
                         className="font-heading text-primary-text leading-[1.1] mb-5 drop-shadow-lg
-                            text-[30px] sm:text-[36px] md:text-[42px] lg:text-[52px] xl:text-[58px]"
+                            text-3xl sm:text-4xl md:text-[42px] lg:text-[52px] xl:text-[58px]"
                     >
                         Warrior Scholar
                     </motion.h2>
@@ -185,7 +185,7 @@ const HeroSection = ({ bgY, aboutData }) => {
                         animate={{ opacity: 1 }}
                         transition={{ duration: 0.8, delay: 0.8 }}
                         className="text-muted-text mb-10 leading-relaxed
-                            text-[14px] sm:text-[15px] md:text-[16px] lg:text-[17px]"
+                            text-sm sm:text-[15px] md:text-base lg:text-[17px]"
                     >
                         From conditioned to conscious manhood — building discipline, identity, and purpose through authorship and technology.
                     </motion.p>
@@ -202,7 +202,7 @@ const HeroSection = ({ bgY, aboutData }) => {
                             {...buttonHover}
                             className="bg-primary-accent text-primary-bg rounded font-bold hover:bg-secondary-accent uppercase tracking-wider shadow-lg flex items-center justify-center
                                 text-[13px] h-11 px-7
-                                md:text-[14px] md:h-12 md:px-9"
+                                md:text-sm md:h-12 md:px-9"
                         >
                             View My Work
                         </motion.a>
@@ -211,7 +211,7 @@ const HeroSection = ({ bgY, aboutData }) => {
                             {...buttonHover}
                             className="border-2 border-primary-accent text-primary-accent rounded font-bold hover:bg-primary-accent hover:text-primary-bg uppercase tracking-wider shadow-lg flex items-center justify-center
                                 text-[13px] h-11 px-7
-                                md:text-[14px] md:h-12 md:px-9"
+                                md:text-sm md:h-12 md:px-9"
                         >
                             Get in Touch
                         </motion.a>
@@ -283,7 +283,7 @@ const AboutSection = ({ aboutData = defaultAbout }) => {
                 <div className="flex flex-col items-center md:items-start md:w-[40%] shrink-0">
                     {/* Photo: natural height based on width */}
                     <div className={`
-                        w-[160px] sm:w-[200px] md:w-[240px]
+                        w-40 sm:w-[200px] md:w-60
                         min-h-[200px] sm:min-h-[250px] md:min-h-[300px] h-auto
                         bg-secondary-bg rounded-lg overflow-hidden border border-border shadow-md
                         flex items-center justify-center mb-6 mx-auto md:mx-0
@@ -327,15 +327,15 @@ const AboutSection = ({ aboutData = defaultAbout }) => {
 
                     {/* Bio text: 14-15px mobile, 15-16px tablet, 16-18px desktop */}
                     <p className="text-primary-text leading-relaxed mb-3
-                        text-[14px] sm:text-[15px] md:text-[16px] lg:text-[17px]">
+                        text-sm sm:text-[15px] md:text-base lg:text-[17px]">
                         {aboutData.intro}
                     </p>
                     <p className="text-muted-text leading-relaxed mb-6
-                        text-[14px] sm:text-[15px] md:text-[16px]">
+                        text-sm sm:text-[15px] md:text-base">
                         {aboutData.paragraph1}
                     </p>
                     <p className="text-muted-text leading-relaxed mb-6
-                        text-[14px] sm:text-[15px] md:text-[16px]">
+                        text-sm sm:text-[15px] md:text-base">
                         {aboutData.paragraph2}
                     </p>
 
@@ -428,15 +428,15 @@ const BookCard = ({ book, featured = false, delay = 0 }) => (
         transition={{ duration: 0.3, ease: "easeInOut", delay }}
         whileHover={{ y: -4, boxShadow: '0 20px 40px rgba(75,47,159,0.15)' }}
         className={`bg-card-bg border border-border overflow-hidden transition-colors hover:border-primary-accent group cursor-pointer ${featured
-            ? 'flex flex-col md:flex-row rounded-[8px]'
-            : 'flex flex-col rounded-[8px] sm:rounded-[8px] rounded-[6px]'
+            ? 'flex flex-col md:flex-row rounded-lg'
+            : 'flex flex-col rounded-lg sm:rounded-lg rounded-md'
             }`}
     >
         {/* Cover Image */}
         <motion.div
             className={`relative overflow-hidden flex-shrink-0 ${featured
-                ? 'w-full md:w-2/5 h-[160px] sm:h-[180px] md:h-auto md:min-h-[240px]'
-                : 'w-full h-[160px] sm:h-[180px] md:h-[200px]'
+                ? 'w-full md:w-2/5 h-40 sm:h-[180px] md:h-auto md:min-h-60'
+                : 'w-full h-40 sm:h-[180px] md:h-[200px]'
                 }`}
             whileHover={{ scale: 1.05 }}
             transition={{ duration: 0.5 }}
