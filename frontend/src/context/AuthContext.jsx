@@ -1,23 +1,22 @@
-import React, { createContext, useState, useEffect, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+/* eslint-disable react-refresh/only-export-components */
+import { createContext, useState, useContext } from 'react';
 
-const AuthContext = createContext();
+export const AuthContext = createContext();
+
+export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState(null);
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
+    const [user, setUser] = useState(() => {
         const userInfo = localStorage.getItem('userInfo');
-        if (userInfo) {
-            try {
-                setUser(JSON.parse(userInfo));
-            } catch (err) {
-                localStorage.removeItem('userInfo');
-            }
+        if (!userInfo) return null;
+        try {
+            return JSON.parse(userInfo);
+        } catch {
+            localStorage.removeItem('userInfo');
+            return null;
         }
-        setLoading(false);
-    }, []);
+    });
+    const [loading] = useState(false);
 
     const login = (userData) => {
         localStorage.setItem('userInfo', JSON.stringify(userData));
@@ -35,5 +34,3 @@ export const AuthProvider = ({ children }) => {
         </AuthContext.Provider>
     );
 };
-
-export const useAuth = () => useContext(AuthContext);

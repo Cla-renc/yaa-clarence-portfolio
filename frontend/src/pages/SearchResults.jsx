@@ -23,6 +23,7 @@ const SearchResults = () => {
                 const { data } = await api.get(`/search?q=${encodeURIComponent(query)}`);
                 setResults(data);
             } catch (err) {
+                console.error(err);
                 setError('Failed to fetch search results.');
             } finally {
                 setLoading(false);

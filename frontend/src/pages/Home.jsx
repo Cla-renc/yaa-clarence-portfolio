@@ -4,7 +4,6 @@ import { motion, useScroll, useTransform, animate, useInView } from 'framer-moti
 import { BookOpenText } from '@phosphor-icons/react';
 import { FacebookIcon, InstagramIcon, TikTokIcon, XIcon, YouTubeIcon, LinkedInIcon, EmailIcon, PhoneIcon, LocationIcon } from '../components/atoms/BrandIcons';
 import api from '../services/api';
-import SearchBar from '../components/molecules/SearchBar';
 import {
   buttonHover,
   buttonScale,
