@@ -164,7 +164,7 @@ const HeroSection = ({ bgY, aboutData }) => {
                         className="text-primary-accent font-bold tracking-[0.2em] uppercase mb-4
                             text-[11px] sm:text-xs md:text-[13px]"
                     >
-                        IT Student &bull; Author &bull; Brand Owner
+                        Software Developer &bull; Author &bull; Brand Owner
                     </motion.div>
 
                     {/* Main heading */}
