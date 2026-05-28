@@ -77,7 +77,7 @@ const HeroSection = ({ bgY, aboutData }) => {
             {/* Subtle background gradient */}
             <motion.div
                 style={{ y: bgY }}
-                className="absolute inset-0 w-full h-full bg-gradient-to-br from-primary-accent/5 via-secondary-bg/40 to-primary-bg pointer-events-none"
+                className="absolute inset-0 w-full h-full bg-linear-to-br from-primary-accent/5 via-secondary-bg/40 to-primary-bg pointer-events-none"
             />
 
             {/* Main content: two-column split */}
@@ -301,7 +301,7 @@ const AboutSection = ({ aboutData = defaultAbout }) => {
                         {aboutData.profilePhoto ? (
                             <img src={aboutData.profilePhoto} alt="Profile" className="w-full h-auto relative z-10 block" />
                         ) : (
-                            <div className="absolute inset-0 bg-gradient-to-tr from-card-bg to-secondary-bg flex flex-col items-center justify-center text-muted-text z-10">
+                            <div className="absolute inset-0 bg-linear-to-tr from-card-bg to-secondary-bg flex flex-col items-center justify-center text-muted-text z-10">
                                 <span className="text-5xl font-black text-primary-accent mb-2">Y.C.</span>
                                 <span className="text-xs font-bold uppercase tracking-widest text-center px-2">Profile Photo</span>
                             </div>
@@ -444,7 +444,7 @@ const BookCard = ({ book, featured = false, delay = 0 }) => (
             {book.coverImage ? (
                 <img src={book.coverImage} alt={book.title} className="w-full h-full object-cover" loading="lazy" decoding="async" />
             ) : (
-                <div className="absolute inset-0 bg-gradient-to-br from-primary-accent/20 via-secondary-bg to-card-bg flex flex-col items-center justify-center">
+                <div className="absolute inset-0 bg-linear-to-br from-primary-accent/20 via-secondary-bg to-card-bg flex flex-col items-center justify-center">
                     <BookOpenText size={48} weight="thin" className="text-primary-accent/40 mb-2" />
                     <span className="text-xs font-bold uppercase tracking-widest text-muted-text">Cover Preview</span>
                 </div>
@@ -597,7 +597,7 @@ const BLDDSection = () => (
         transition={{ duration: 0.6, ease: "easeOut" }}
         className="py-24 px-4 max-w-6xl mx-auto w-full scroll-mt-20"
     >
-        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-card-bg via-secondary-bg to-primary-bg border border-border p-12 md:p-20 shadow-[0_0_50px_rgba(75,47,159,0.05)]">
+        <div className="relative overflow-hidden rounded-3xl bg-linear-to-br from-card-bg via-secondary-bg to-primary-bg border border-border p-12 md:p-20 shadow-[0_0_50px_rgba(75,47,159,0.05)]">
             <div className="absolute top-0 right-0 p-8 opacity-[0.03] select-none pointer-events-none">
                 <span className="text-[200px] font-heading font-black leading-none">Y.C.</span>
             </div>
