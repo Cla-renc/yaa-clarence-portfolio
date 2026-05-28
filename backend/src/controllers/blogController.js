@@ -39,7 +39,11 @@ const createBlogPost = async (req, res) => {
 
 const deleteBlogPost = async (req, res) => {
     try {
-        const post = await BlogPost.findById(req.params.id);
+        // The route is /:slug but we send _id from the frontend, so try both
+        const identifier = req.params.slug;
+        let post = await BlogPost.findById(identifier).catch(() => null);
+        if (!post) post = await BlogPost.findOne({ slug: identifier });
+
         if (post) {
             await BlogPost.deleteOne({ _id: post._id });
             res.json({ message: 'Post removed' });
