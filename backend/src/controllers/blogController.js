@@ -64,4 +64,40 @@ const getBlogPostBySlug = async (req, res) => {
     }
 };
 
-module.exports = { getBlogPosts, getBlogPostBySlug, createBlogPost, deleteBlogPost };
+const likeBlogPost = async (req, res) => {
+    try {
+        const post = await BlogPost.findById(req.params.id);
+        if (post) {
+            post.likes = (post.likes || 0) + 1;
+            await post.save();
+            res.json({ message: 'Post liked', likes: post.likes });
+        } else {
+            res.status(404).json({ message: 'Post not found' });
+        }
+    } catch (error) {
+        res.status(500).json({ message: 'Server Error' });
+    }
+};
+
+const addComment = async (req, res) => {
+    try {
+        const { name, text } = req.body;
+        if (!name || !text) {
+            return res.status(400).json({ message: 'Name and text are required' });
+        }
+
+        const post = await BlogPost.findById(req.params.id);
+        if (post) {
+            const newComment = { name, text };
+            post.comments.push(newComment);
+            await post.save();
+            res.status(201).json(post.comments[post.comments.length - 1]);
+        } else {
+            res.status(404).json({ message: 'Post not found' });
+        }
+    } catch (error) {
+        res.status(500).json({ message: 'Server Error' });
+    }
+};
+
+module.exports = { getBlogPosts, getBlogPostBySlug, createBlogPost, deleteBlogPost, likeBlogPost, addComment };

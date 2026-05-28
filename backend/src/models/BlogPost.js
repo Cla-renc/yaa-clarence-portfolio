@@ -13,6 +13,12 @@ const blogPostSchema = new mongoose.Schema({
     featuredImage: { type: String },
     mediaUrl: { type: String },
     mediaType: { type: String, enum: ['image', 'video'] },
+    likes: { type: Number, default: 0 },
+    comments: [{
+        name: { type: String, required: true },
+        text: { type: String, required: true },
+        date: { type: Date, default: Date.now }
+    }],
     createdAt: { type: Date, default: Date.now }
 });
 blogPostSchema.index({ title: "text", content: "text" });

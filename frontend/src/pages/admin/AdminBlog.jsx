@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import api from '../../services/api';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 const AdminBlog = () => {
     const [posts, setPosts] = useState([]);
@@ -128,8 +130,14 @@ const AdminBlog = () => {
                         <input type="text" required value={formData.excerpt} onChange={e => setFormData({ ...formData, excerpt: e.target.value })} className="w-full bg-secondary-bg border border-border rounded p-2 focus:outline-none focus:border-primary-accent" />
                     </div>
                     <div>
-                        <label className="block text-sm font-semibold mb-1">Content (Markdown / Text)</label>
-                        <textarea required rows="12" value={formData.content} onChange={e => setFormData({ ...formData, content: e.target.value })} className="w-full bg-secondary-bg border border-border rounded p-3 font-mono text-sm leading-relaxed focus:outline-none focus:border-primary-accent"></textarea>
+                        <label className="block text-sm font-semibold mb-1">Content</label>
+                        <ReactQuill 
+                            theme="snow" 
+                            value={formData.content} 
+                            onChange={(content) => setFormData({ ...formData, content })} 
+                            className="bg-white text-black mb-12"
+                            style={{ height: '300px' }}
+                        />
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
