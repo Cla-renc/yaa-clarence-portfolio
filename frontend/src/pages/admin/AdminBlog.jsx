@@ -2,8 +2,25 @@ import { useState, useEffect, useRef } from 'react';
 import api from '../../services/api';
 
 /* ─── Minimal Rich Text Toolbar ─────────────────────────────── */
+const COLORS = [
+    { name: 'Default', value: '#1e293b' }, // slate-800
+    { name: 'Red', value: '#ef4444' },     // red-500
+    { name: 'Orange', value: '#f97316' },  // orange-500
+    { name: 'Yellow', value: '#eab308' },  // yellow-500
+    { name: 'Green', value: '#22c55e' },   // green-500
+    { name: 'Blue', value: '#3b82f6' },    // blue-500
+    { name: 'Indigo', value: '#6366f1' },  // indigo-500
+    { name: 'Purple', value: '#a855f7' },  // purple-500
+    { name: 'Pink', value: '#ec4899' },    // pink-500
+    { name: 'White', value: '#ffffff' },   // white
+];
+
 const RichEditor = ({ value, onChange }) => {
     const editorRef = useRef(null);
+    const colorPickerRef = useRef(null);
+    const savedSelectionRef = useRef(null);
+    const [selectedColor, setSelectedColor] = useState('#1e293b');
+    const [showColorPicker, setShowColorPicker] = useState(false);
 
     // Sync external value into editor only on first mount
     useEffect(() => {
@@ -11,6 +28,32 @@ const RichEditor = ({ value, onChange }) => {
             editorRef.current.innerHTML = value || '';
         }
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+    // Close color picker on click outside
+    useEffect(() => {
+        const handleOutsideClick = (e) => {
+            if (colorPickerRef.current && !colorPickerRef.current.contains(e.target)) {
+                setShowColorPicker(false);
+            }
+        };
+        document.addEventListener('mousedown', handleOutsideClick);
+        return () => document.removeEventListener('mousedown', handleOutsideClick);
+    }, []);
+
+    const saveSelection = () => {
+        const sel = window.getSelection();
+        if (sel.rangeCount > 0) {
+            savedSelectionRef.current = sel.getRangeAt(0);
+        }
+    };
+
+    const restoreSelection = () => {
+        if (savedSelectionRef.current) {
+            const sel = window.getSelection();
+            sel.removeAllRanges();
+            sel.addRange(savedSelectionRef.current);
+        }
+    };
 
     const exec = (cmd, arg = null) => {
         editorRef.current?.focus();
@@ -27,6 +70,19 @@ const RichEditor = ({ value, onChange }) => {
         onChange(editorRef.current?.innerHTML || '');
     };
 
+    const handleColorButtonClick = (e) => {
+        e.preventDefault();
+        saveSelection();
+        setShowColorPicker((prev) => !prev);
+    };
+
+    const handleColorSelect = (color) => {
+        setSelectedColor(color);
+        restoreSelection();
+        exec('foreColor', color);
+        setShowColorPicker(false);
+    };
+
     const toolbarBtn = (label, cmd, arg) => (
         <button
             type="button"
@@ -41,7 +97,7 @@ const RichEditor = ({ value, onChange }) => {
     return (
         <div className="border border-border rounded overflow-hidden">
             {/* Toolbar */}
-            <div className="flex flex-wrap gap-1 p-2 bg-secondary-bg border-b border-border">
+            <div className="flex flex-wrap gap-1 p-2 bg-secondary-bg border-b border-border items-center">
                 {toolbarBtn('B', 'bold')}
                 {toolbarBtn('I', 'italic')}
                 {toolbarBtn('U', 'underline')}
@@ -51,6 +107,64 @@ const RichEditor = ({ value, onChange }) => {
                 {toolbarBtn('• List', 'insertUnorderedList')}
                 {toolbarBtn('1. List', 'insertOrderedList')}
                 {toolbarBtn('Link', 'createLink')}
+                
+                {/* Text Color Picker */}
+                <div className="relative inline-block" ref={colorPickerRef}>
+                    <button
+                        type="button"
+                        onMouseDown={handleColorButtonClick}
+                        className="px-2 py-1 bg-secondary-bg border border-border rounded text-primary-text hover:bg-primary-accent hover:text-primary-bg transition text-sm font-bold flex items-center gap-1.5 cursor-pointer"
+                        title="Text Color"
+                    >
+                        <span className="relative inline-block leading-none">
+                            A
+                            <span
+                                className="absolute left-0 right-0 -bottom-0.5 h-[3px] rounded-sm"
+                                style={{ backgroundColor: selectedColor }}
+                            />
+                        </span>
+                        <span className="text-[9px] opacity-70">▼</span>
+                    </button>
+
+                    {showColorPicker && (
+                        <div className="absolute left-0 mt-1 z-50 p-2.5 bg-card-bg border border-border rounded-xl shadow-xl grid grid-cols-5 gap-1.5 min-w-[160px]">
+                            {COLORS.map((color) => (
+                                <button
+                                    key={color.value}
+                                    type="button"
+                                    title={color.name}
+                                    onMouseDown={(e) => {
+                                        e.preventDefault();
+                                        handleColorSelect(color.value);
+                                    }}
+                                    className="w-6 h-6 rounded-full border border-border/30 cursor-pointer transition hover:scale-115 active:scale-90 shadow-sm"
+                                    style={{ backgroundColor: color.value }}
+                                />
+                            ))}
+                            <div className="col-span-5 flex items-center justify-between mt-2 pt-2 border-t border-border">
+                                <span className="text-xs font-semibold text-muted-text">Custom:</span>
+                                <label className="relative w-6 h-6 rounded-full border border-border/40 overflow-hidden cursor-pointer transition hover:scale-115 shadow-sm">
+                                    <input
+                                        type="color"
+                                        value={selectedColor}
+                                        onMouseDown={saveSelection}
+                                        onChange={(e) => {
+                                            setSelectedColor(e.target.value);
+                                            restoreSelection();
+                                            exec('foreColor', e.target.value);
+                                        }}
+                                        className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
+                                    />
+                                    <div
+                                        className="w-full h-full"
+                                        style={{ backgroundColor: selectedColor }}
+                                    />
+                                </label>
+                            </div>
+                        </div>
+                    )}
+                </div>
+
                 {toolbarBtn('Clear', 'removeFormat')}
             </div>
             {/* Editable area */}
