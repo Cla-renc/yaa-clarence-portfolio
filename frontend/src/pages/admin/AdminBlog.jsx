@@ -14,7 +14,13 @@ const RichEditor = ({ value, onChange }) => {
 
     const exec = (cmd, arg = null) => {
         editorRef.current?.focus();
-        document.execCommand(cmd, false, arg);
+        let finalArg = arg;
+        if (cmd === 'createLink') {
+            const url = prompt('URL:');
+            if (!url) return;
+            finalArg = url;
+        }
+        document.execCommand(cmd, false, finalArg);
     };
 
     const handleInput = () => {
@@ -44,7 +50,7 @@ const RichEditor = ({ value, onChange }) => {
                 {toolbarBtn('¶', 'formatBlock', 'p')}
                 {toolbarBtn('• List', 'insertUnorderedList')}
                 {toolbarBtn('1. List', 'insertOrderedList')}
-                {toolbarBtn('Link', 'createLink', prompt('URL:') || '')}
+                {toolbarBtn('Link', 'createLink')}
                 {toolbarBtn('Clear', 'removeFormat')}
             </div>
             {/* Editable area */}
