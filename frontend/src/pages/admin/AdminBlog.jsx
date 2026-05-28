@@ -20,7 +20,9 @@ const RichEditor = ({ value, onChange }) => {
     const colorPickerRef = useRef(null);
     const savedSelectionRef = useRef(null);
     const [selectedColor, setSelectedColor] = useState('#1e293b');
+    const [selectedBgColor, setSelectedBgColor] = useState('#facc15');
     const [showColorPicker, setShowColorPicker] = useState(false);
+    const [colorMode, setColorMode] = useState('foreColor');
 
     // Sync external value into editor only on first mount
     useEffect(() => {
@@ -70,16 +72,21 @@ const RichEditor = ({ value, onChange }) => {
         onChange(editorRef.current?.innerHTML || '');
     };
 
-    const handleColorButtonClick = (e) => {
+    const handleColorButtonClick = (e, mode) => {
         e.preventDefault();
         saveSelection();
-        setShowColorPicker((prev) => !prev);
+        setColorMode(mode);
+        setShowColorPicker(true);
     };
 
     const handleColorSelect = (color) => {
-        setSelectedColor(color);
+        if (colorMode === 'hiliteColor') {
+            setSelectedBgColor(color);
+        } else {
+            setSelectedColor(color);
+        }
         restoreSelection();
-        exec('foreColor', color);
+        exec(colorMode, color);
         setShowColorPicker(false);
     };
 
@@ -98,36 +105,60 @@ const RichEditor = ({ value, onChange }) => {
         <div className="border border-border rounded overflow-hidden">
             {/* Toolbar */}
             <div className="flex flex-wrap gap-1 p-2 bg-secondary-bg border-b border-border items-center">
-                {toolbarBtn('B', 'bold')}
+                    {toolbarBtn('B', 'bold')}
                 {toolbarBtn('I', 'italic')}
                 {toolbarBtn('U', 'underline')}
+                {toolbarBtn('S', 'strikeThrough')}
                 {toolbarBtn('H2', 'formatBlock', 'h2')}
                 {toolbarBtn('H3', 'formatBlock', 'h3')}
                 {toolbarBtn('¶', 'formatBlock', 'p')}
+                {toolbarBtn('Quote', 'formatBlock', 'blockquote')}
+                {toolbarBtn('Code', 'formatBlock', 'pre')}
                 {toolbarBtn('• List', 'insertUnorderedList')}
                 {toolbarBtn('1. List', 'insertOrderedList')}
                 {toolbarBtn('Link', 'createLink')}
-                
-                {/* Text Color Picker */}
+                {toolbarBtn('Unlink', 'unlink')}
+                {toolbarBtn('Left', 'justifyLeft')}
+                {toolbarBtn('Center', 'justifyCenter')}
+                {toolbarBtn('Right', 'justifyRight')}
+
+                {/* Text / Highlight Color Picker */}
                 <div className="relative inline-block" ref={colorPickerRef}>
-                    <button
-                        type="button"
-                        onMouseDown={handleColorButtonClick}
-                        className="px-2 py-1 bg-secondary-bg border border-border rounded text-primary-text hover:bg-primary-accent hover:text-primary-bg transition text-sm font-bold flex items-center gap-1.5 cursor-pointer"
-                        title="Text Color"
-                    >
-                        <span className="relative inline-block leading-none">
-                            A
-                            <span
-                                className="absolute left-0 right-0 -bottom-0.5 h-[3px] rounded-sm"
-                                style={{ backgroundColor: selectedColor }}
-                            />
-                        </span>
-                        <span className="text-[9px] opacity-70">▼</span>
-                    </button>
+                    <div className="flex gap-1">
+                        <button
+                            type="button"
+                            onMouseDown={(e) => handleColorButtonClick(e, 'foreColor')}
+                            className="px-2 py-1 bg-secondary-bg border border-border rounded text-primary-text hover:bg-primary-accent hover:text-primary-bg transition text-sm font-bold flex items-center gap-1.5 cursor-pointer"
+                            title="Text Color"
+                        >
+                            <span className="relative inline-block leading-none">
+                                A
+                                <span
+                                    className="absolute left-0 right-0 -bottom-0.5 h-0.75 rounded-sm"
+                                    style={{ backgroundColor: selectedColor }}
+                                />
+                            </span>
+                            <span className="text-[9px] opacity-70">▼</span>
+                        </button>
+                        <button
+                            type="button"
+                            onMouseDown={(e) => handleColorButtonClick(e, 'hiliteColor')}
+                            className="px-2 py-1 bg-secondary-bg border border-border rounded text-primary-text hover:bg-primary-accent hover:text-primary-bg transition text-sm font-bold flex items-center gap-1.5 cursor-pointer"
+                            title="Highlight Color"
+                        >
+                            <span className="relative inline-block leading-none">
+                                ■
+                                <span
+                                    className="absolute left-0 right-0 -bottom-0.5 h-0.75 rounded-sm"
+                                    style={{ backgroundColor: selectedBgColor }}
+                                />
+                            </span>
+                            <span className="text-[9px] opacity-70">▼</span>
+                        </button>
+                    </div>
 
                     {showColorPicker && (
-                        <div className="absolute left-0 mt-1 z-50 p-2.5 bg-card-bg border border-border rounded-xl shadow-xl grid grid-cols-5 gap-1.5 min-w-[160px]">
+                        <div className="absolute left-0 mt-1 z-50 p-2.5 bg-card-bg border border-border rounded-xl shadow-xl grid grid-cols-5 gap-1.5 min-w-45">
                             {COLORS.map((color) => (
                                 <button
                                     key={color.value}
@@ -146,18 +177,23 @@ const RichEditor = ({ value, onChange }) => {
                                 <label className="relative w-6 h-6 rounded-full border border-border/40 overflow-hidden cursor-pointer transition hover:scale-115 shadow-sm">
                                     <input
                                         type="color"
-                                        value={selectedColor}
+                                        value={colorMode === 'hiliteColor' ? selectedBgColor : selectedColor}
                                         onMouseDown={saveSelection}
                                         onChange={(e) => {
-                                            setSelectedColor(e.target.value);
+                                            const value = e.target.value;
+                                            if (colorMode === 'hiliteColor') {
+                                                setSelectedBgColor(value);
+                                            } else {
+                                                setSelectedColor(value);
+                                            }
                                             restoreSelection();
-                                            exec('foreColor', e.target.value);
+                                            exec(colorMode, value);
                                         }}
                                         className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
                                     />
                                     <div
                                         className="w-full h-full"
-                                        style={{ backgroundColor: selectedColor }}
+                                        style={{ backgroundColor: colorMode === 'hiliteColor' ? selectedBgColor : selectedColor }}
                                     />
                                 </label>
                             </div>
