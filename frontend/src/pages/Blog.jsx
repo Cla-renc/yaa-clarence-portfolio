@@ -107,7 +107,7 @@ const Blog = () => {
                             className="flex flex-col md:flex-row gap-8 bg-card-bg border border-border rounded-lg overflow-hidden hover:border-primary-accent transition-all duration-300 shadow-lg"
                         >
                             {/* Featured Image */}
-                            <div className="w-full md:w-2/5 bg-secondary-bg flex items-center justify-center min-h-[300px] overflow-hidden">
+                            <div className="w-full md:w-2/5 bg-secondary-bg flex items-center justify-center min-h-75 overflow-hidden">
                                 {renderMediaPreview(featuredPost, 'w-full h-full object-cover')}
                             </div>
 

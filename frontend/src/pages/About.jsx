@@ -51,7 +51,7 @@ const About = () => {
                 className="flex flex-col md:flex-row items-start gap-12 md:gap-16 mb-20"
             >
                 {/* ── LEFT: portrait with decorative offset block ── */}
-                <div className="relative flex-shrink-0 w-full md:w-auto flex justify-center">
+                <div className="relative shrink-0 w-full md:w-auto flex justify-center">
                     {/* Decorative offset block — sits behind & below the photo */}
                     <div
                         className="absolute bottom-[-18px] left-[-18px] w-[88%] h-[88%] rounded-sm z-0"
@@ -266,7 +266,7 @@ const About = () => {
                             {/* Timeline spine */}
                             <div className="flex flex-col items-center">
                                 <div
-                                    className="w-3 h-3 rounded-full mt-1.5 flex-shrink-0"
+                                    className="w-3 h-3 rounded-full mt-1.5 shrink-0"
                                     style={{ background: 'var(--primary-accent, #6337b6)', boxShadow: '0 0 0 4px rgba(99,55,182,0.15)' }}
                                 />
                                 {i < 1 && (

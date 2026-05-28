@@ -72,7 +72,7 @@ const HeroSection = ({ bgY, aboutData }) => {
     return (
         <section
             id="hero"
-            className="relative min-h-[85vh] w-[100vw] ml-[calc(-50vw+50%)] overflow-hidden flex flex-col justify-center bg-primary-bg"
+            className="relative min-h-[85vh] w-screen ml-[calc(-50vw+50%)] overflow-hidden flex flex-col justify-center bg-primary-bg"
         >
             {/* Subtle background gradient */}
             <motion.div
@@ -85,7 +85,7 @@ const HeroSection = ({ bgY, aboutData }) => {
 
                 {/* ── LEFT: Profile Photo (no card/bg, blends with theme) ── */}
                 <motion.div
-                    className="relative flex-shrink-0 w-60 sm:w-[280px] md:w-80 lg:w-[360px] xl:w-[380px] self-end md:pb-24"
+                    className="relative shrink-0 w-60 sm:w-70 md:w-80 lg:w-90 xl:w-95 self-end md:pb-24"
                     initial={{ opacity: 0, x: -60 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.9, ease: 'easeOut' }}
@@ -283,8 +283,8 @@ const AboutSection = ({ aboutData = defaultAbout }) => {
                 <div className="flex flex-col items-center md:items-start md:w-[40%] shrink-0">
                     {/* Photo: natural height based on width */}
                     <div className={`
-                        w-40 sm:w-[200px] md:w-60
-                        min-h-[200px] sm:min-h-[250px] md:min-h-[300px] h-auto
+                        w-40 sm:w-50 md:w-60
+                        min-h-50 sm:min-h-62.5 md:min-h-75 h-auto
                         bg-secondary-bg rounded-lg overflow-hidden border border-border shadow-md
                         flex items-center justify-center mb-6 mx-auto md:mx-0
                         relative ${isAdmin ? 'cursor-pointer group' : ''}
@@ -429,14 +429,14 @@ const BookCard = ({ book, featured = false, delay = 0 }) => (
         whileHover={{ y: -4, boxShadow: '0 20px 40px rgba(75,47,159,0.15)' }}
         className={`bg-card-bg border border-border overflow-hidden transition-colors hover:border-primary-accent group cursor-pointer ${featured
             ? 'flex flex-col md:flex-row rounded-lg'
-            : 'flex flex-col rounded-lg sm:rounded-lg rounded-md'
+            : 'flex flex-col rounded-md sm:rounded-lg'
             }`}
     >
         {/* Cover Image */}
         <motion.div
-            className={`relative overflow-hidden flex-shrink-0 ${featured
-                ? 'w-full md:w-2/5 h-40 sm:h-[180px] md:h-auto md:min-h-60'
-                : 'w-full h-40 sm:h-[180px] md:h-[200px]'
+            className={`relative overflow-hidden shrink-0 ${featured
+                ? 'w-full md:w-2/5 h-40 sm:h-45 md:h-auto md:min-h-60'
+                : 'w-full h-40 sm:h-45 md:h-50'
                 }`}
             whileHover={{ scale: 1.05 }}
             transition={{ duration: 0.5 }}
@@ -520,7 +520,7 @@ const BooksSection = ({ books }) => {
     const grid = books.slice(1);
 
     return (
-        <section id="books" className="py-24 px-4 bg-secondary-bg/30 w-[100vw] ml-[calc(-50vw+50%)] scroll-mt-20">
+        <section id="books" className="py-24 px-4 bg-secondary-bg/30 w-screen ml-[calc(-50vw+50%)] scroll-mt-20">
             <div className="max-w-6xl mx-auto">
                 {/* Section Header */}
                 <motion.div
@@ -699,7 +699,7 @@ const BLDDSection = () => (
 
 /* ─── Section: Blog ──────────────────────────────────────────────────────── */
 const BlogSection = ({ posts }) => (
-    <section id="blog" className="py-24 px-4 w-[100vw] ml-[calc(-50vw+50%)] bg-secondary-bg/20 scroll-mt-20">
+    <section id="blog" className="py-24 px-4 w-screen ml-[calc(-50vw+50%)] bg-secondary-bg/20 scroll-mt-20">
         <div className="max-w-6xl mx-auto">
             <motion.div
                 className="flex flex-col sm:flex-row justify-between items-end mb-12 gap-4"
@@ -869,7 +869,7 @@ const ContactSection = ({ socialLinks = {} }) => {
                             onChange={e => setFormData({ ...formData, message: e.target.value })}
                             whileFocus={{ scale: 1.02 }}
                             transition={{ duration: 0.2 }}
-                            className="w-full bg-secondary-bg border border-border rounded p-3 text-primary-text focus:outline-none focus:border-primary-accent transition-colors resize-none h-full min-h-[120px]"
+                            className="w-full bg-secondary-bg border border-border rounded p-3 text-primary-text focus:outline-none focus:border-primary-accent transition-colors resize-none h-full min-h-30"
                         />
                     </motion.div>
                     <motion.button
